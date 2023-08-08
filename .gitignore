@@ -1,0 +1,16 @@
+*/target/
+.idea
+*.iml
+.project
+.settings
+install.lock
+*.log
+.logs
+logs
+*.iws
+*.classpath
+.DS_Store
+*.patch
+~$*
+pom.properties
+*.pdb
