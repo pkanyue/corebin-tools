@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -127,13 +127,11 @@ public class GitlabProjectCloneService {
      * https://docs.gitlab.com/ee/api/branches.html#branches-api
      *
      * @param projectId 项目ID
-     * @return
      */
     public List<GitBranch> getBranches(Long projectId) {
-        String url = gitlabUrl + "/api/v3/projects/{projectId}/repository/branches?private_token={privateToken}";
+        String url = StrUtil.format("{}/api/v4/projects/{}/repository/branches", gitlabUrl, projectId);
         HttpResponse response = HttpUtil.createGet(url)
                 .form("private_token", privateToken)
-                .form("projectId", projectId)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .execute();
 
@@ -166,8 +164,8 @@ public class GitlabProjectCloneService {
         try {
             Process exec = Runtime.getRuntime().exec(command, null, execDir);
             exec.waitFor();
-            String successResult = StreamUtils.copyToString(exec.getInputStream(), Charset.forName("UTF-8"));
-            String errorResult = StreamUtils.copyToString(exec.getErrorStream(),Charset.forName("UTF-8"));
+            String successResult = StreamUtils.copyToString(exec.getInputStream(), StandardCharsets.UTF_8);
+            String errorResult = StreamUtils.copyToString(exec.getErrorStream(), StandardCharsets.UTF_8);
             log.info("successResult: " + successResult);
             log.info("errorResult: " + errorResult);
             log.info("================================");
