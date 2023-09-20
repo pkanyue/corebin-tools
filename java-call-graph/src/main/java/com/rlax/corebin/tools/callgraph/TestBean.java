@@ -1,6 +1,9 @@
 package com.rlax.corebin.tools.callgraph;
 
+import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.StrUtil;
+
+import java.util.concurrent.Callable;
 
 /**
  * @author Rlax
@@ -8,7 +11,7 @@ import cn.hutool.core.util.StrUtil;
  */
 public class TestBean {
 
-    public void save(String ps1) {
+    public void save(String ps1) throws Exception {
         String tmp = StrUtil.trim(ps1);
         tmp = StrUtil.format("{}", tmp);
         ms1();
@@ -21,6 +24,11 @@ public class TestBean {
 
     public void m1() {
 
+    }
+
+    public void callable() throws Exception {
+        String call = ((Callable<String>) () -> "null").call();
+        Console.log(call);
     }
 
 }

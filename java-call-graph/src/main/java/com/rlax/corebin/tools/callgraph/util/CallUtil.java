@@ -1,11 +1,14 @@
 package com.rlax.corebin.tools.callgraph.util;
 
+import cn.hutool.core.util.ClassUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.rlax.corebin.tools.callgraph.common.CallType;
 import com.rlax.corebin.tools.callgraph.common.CommonConstants;
 import com.rlax.corebin.tools.callgraph.exception.CallGraphGenerateException;
 import com.rlax.corebin.tools.callgraph.model.CallClass;
 import com.rlax.corebin.tools.callgraph.model.CallItem;
 import com.rlax.corebin.tools.callgraph.model.CallMethod;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.LineNumberTable;
 import org.apache.bcel.classfile.Method;
@@ -22,14 +25,33 @@ import java.util.List;
  */
 public class CallUtil {
 
-    public static List<CallItem> generateModel(String fullCallClassName, String fullMethodString) {
-        List<CallItem> callItemList = new ArrayList<>();
+    public static List<CallItem> generateModel(String fullCallClassName, String methodName, Class<?>... paramClassType) {
+        JavaClass callerJavaClass = BaceUtil.loadClass(fullCallClassName);
 
+        java.lang.reflect.Method m = ReflectUtil.getMethod(ClassUtil.loadClass(fullCallClassName), methodName, paramClassType);
+        Method method = BaceUtil.findMethodByReflectMethod(callerJavaClass, m);
+        if (method == null) {
+            throw new CallGraphGenerateException(1, "method can not find");
+        }
+
+        return generateModel(callerJavaClass, method);
+    }
+
+
+
+
+    public static List<CallItem> generateModel(String fullCallClassName, String fullMethodString) {
         JavaClass callerJavaClass = BaceUtil.loadClass(fullCallClassName);
         Method method = BaceUtil.findMethodByFullName(callerJavaClass, fullMethodString);
         if (method == null) {
             throw new CallGraphGenerateException(1, "method can not find");
         }
+
+        return generateModel(callerJavaClass, method);
+    }
+
+    public static List<CallItem> generateModel(JavaClass callerJavaClass, Method method) {
+        List<CallItem> callItemList = new ArrayList<>();
 
         CallClass callerClass = CallClass.create(callerJavaClass);
         CallMethod callerMethod = CallMethod.create(callerClass, method);
@@ -48,17 +70,39 @@ public class CallUtil {
 
             InvokeInstruction invokeInstruction = (InvokeInstruction) instructionHandle.getInstruction();
             // 获取被调用类名
-            String calledClassName = invokeInstruction.getClassName(constantPoolGen);
-            // 获取被调用方法
-            String calledMethodName = invokeInstruction.getMethodName(constantPoolGen);
-            String calledSignature = invokeInstruction.getSignature(constantPoolGen);
+            String calledClassName;
+            String calledMethodName;
+            Type[] calledArguments;
+
+            switch (opCode) {
+                // 调用动态执行
+                case Const.INVOKEDYNAMIC:
+                    calledClassName = invokeInstruction.getType(constantPoolGen).toString();
+                    calledMethodName = invokeInstruction.getMethodName(constantPoolGen);
+                    calledArguments = invokeInstruction.getArgumentTypes(constantPoolGen);
+                    break;
+                // 接口
+                case Const.INVOKEINTERFACE:
+                // 调用私有方法，父类方法(super.)，类构造器方法
+                case Const.INVOKESPECIAL:
+                // 静态方法
+                case Const.INVOKESTATIC:
+                // 所有虚方法
+                case Const.INVOKEVIRTUAL:
+                    calledClassName = invokeInstruction.getReferenceType(constantPoolGen).toString();
+                    calledMethodName = invokeInstruction.getMethodName(constantPoolGen);
+                    calledArguments = invokeInstruction.getArgumentTypes(constantPoolGen);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + opCode);
+            }
 
             if (calledMethodName.equals(CommonConstants.METHOD_NAME_INIT)) {
                 continue;
             }
 
             JavaClass calledJavaClass = BaceUtil.loadClass(calledClassName);
-            Method calledJavaMethod = BaceUtil.findMethod(calledJavaClass, calledMethodName, calledSignature);
+            Method calledJavaMethod = BaceUtil.findMethod(calledJavaClass, calledMethodName, calledArguments);
 
             CallClass calledClass = CallClass.create(calledJavaClass);
             CallMethod calledMethod = CallMethod.create(calledClass, calledJavaMethod);

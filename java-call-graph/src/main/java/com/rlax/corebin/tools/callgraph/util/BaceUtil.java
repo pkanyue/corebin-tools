@@ -8,6 +8,9 @@ import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.Utility;
+import org.apache.bcel.generic.Type;
+
+import java.util.Arrays;
 
 /**
  * BaceUtil
@@ -48,18 +51,24 @@ public class BaceUtil {
     }
 
     @SneakyThrows
-    public static Method findMethod(JavaClass javaClass, String callerMethodName, String callSignature) {
+    public static Method findMethod(JavaClass javaClass, String callerMethodName, Type[] calledArguments) {
+        log.info("{}, {}, {}", javaClass.getClassName(), callerMethodName, calledArguments);
         for (Method method : javaClass.getMethods()) {
             if (!method.getName().equals(callerMethodName)) {
                 continue;
             }
-            if (!method.getSignature().equals(callSignature)) {
+            if (!Arrays.equals(method.getArgumentTypes(), calledArguments)) {
                 continue;
             }
 
             return method;
         }
 
-        return findMethod(javaClass.getSuperClass(), callerMethodName, callSignature);
+        // 找不到的话，会去父类找
+        return findMethod(javaClass.getSuperClass(), callerMethodName, calledArguments);
+    }
+
+    public static Method findMethodByReflectMethod(JavaClass javaClass, java.lang.reflect.Method method) {
+        return javaClass.getMethod(method);
     }
 }

@@ -14,7 +14,13 @@ public class CallUtilTest {
 
     @Test
     void generateModel() {
-        List<CallItem> list = CallUtil.generateModel("com.rlax.corebin.tools.callgraph.TestBean", "public void save(String ps1)");
+        List<CallItem> list = CallUtil.generateModel("bean.TestBean", "public void save(String ps1)");
+        Console.log(JSONUtil.toJsonPrettyStr(list));
+    }
+
+    @Test
+    void test() {
+        List<CallItem> list = CallUtil.generateModel("bean.TestBean", "callable", String.class);
         Console.log(JSONUtil.toJsonPrettyStr(list));
     }
 
