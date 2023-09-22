@@ -4,7 +4,6 @@ import com.rlax.corebin.tools.callgraph.common.CallType;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.InvokeInstruction;
 
 /**
  * 方法调用指令处理器
@@ -12,6 +11,9 @@ import org.apache.bcel.generic.InvokeInstruction;
  *
  */
 public interface CallCommandHandler {
+
+    void setNextCallCommandHandler(CallCommandHandler next);
+    MethodCallInfo handle(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle);
 
     /**
      * 调用指令处理器

@@ -12,19 +12,14 @@ import org.apache.bcel.generic.InvokeInstruction;
  */
 public abstract class AbstractCallCommandHandler implements CallCommandHandler {
 
-    protected AbstractCallCommandHandler next;
+    protected CallCommandHandler next;
 
-    public void setNextCallCommandHandler(AbstractCallCommandHandler nextCallCommandHandler) {
+    @Override
+    public void setNextCallCommandHandler(CallCommandHandler nextCallCommandHandler) {
         this.next = nextCallCommandHandler;
     }
 
-    /**
-     * 判断调用类型是否支持
-     * @param callType 调用类型
-     * @return 是否支持
-     */
-    public abstract boolean support(CallType callType);
-
+    @Override
     public MethodCallInfo handle(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle) {
         InvokeInstruction invokeInstruction = (InvokeInstruction) instructionHandle.getInstruction();
         short opCode = invokeInstruction.getOpcode();
@@ -39,4 +34,10 @@ public abstract class AbstractCallCommandHandler implements CallCommandHandler {
         }
     }
 
+    /**
+     * 判断调用类型是否支持
+     * @param callType 调用类型
+     * @return 是否支持
+     */
+    public abstract boolean support(CallType callType);
 }

@@ -14,23 +14,16 @@ import org.junit.jupiter.api.Test;
  * @author Rlax
  * @date 2023/09/22
  */
-public class HandlerTest {
+public class CallCommandHandlerDispatcherTest {
 
     @Test
     void run() {
-        InvokeJvmDynamicCallCommandHandler invokeJvmDynamicCallCommandHandler = new InvokeJvmDynamicCallCommandHandler();
-
-        InvokeJvmStaticCallCommandHandler invokeJvmStaticCallCommandHandler = new InvokeJvmStaticCallCommandHandler();
-        InvokeJvmSpecialCallCommandHandler invokeJvmSpecialCallCommandHandler = new InvokeJvmSpecialCallCommandHandler();
-        InvokeJvmVirtualCallCommandHandler invokeJvmVirtualCallCommandHandler = new InvokeJvmVirtualCallCommandHandler();
-        InvokeJvmInterfaceCallCommandHandler invokeJvmInterfaceCallCommandHandler = new InvokeJvmInterfaceCallCommandHandler();
-
-        invokeJvmDynamicCallCommandHandler.setNextCallCommandHandler(invokeJvmStaticCallCommandHandler);
-        invokeJvmStaticCallCommandHandler.setNextCallCommandHandler(invokeJvmSpecialCallCommandHandler);
-        invokeJvmSpecialCallCommandHandler.setNextCallCommandHandler(invokeJvmVirtualCallCommandHandler);
-        invokeJvmVirtualCallCommandHandler.setNextCallCommandHandler(invokeJvmInterfaceCallCommandHandler);
-
-
+        CallCommandHandlerDispatcher callCommandHandlerDispatcher = new CallCommandHandlerDispatcher();
+        callCommandHandlerDispatcher.addHandler(new InvokeJvmDynamicCallCommandHandler());
+        callCommandHandlerDispatcher.addHandler(new InvokeJvmStaticCallCommandHandler());
+        callCommandHandlerDispatcher.addHandler(new InvokeJvmSpecialCallCommandHandler());
+        callCommandHandlerDispatcher.addHandler(new InvokeJvmVirtualCallCommandHandler());
+        callCommandHandlerDispatcher.addHandler(new InvokeJvmInterfaceCallCommandHandler());
 
         String fullCallClassName = "bean.TestBean";
         JavaClass callerJavaClass = BaceUtil.loadClass(fullCallClassName);
@@ -43,7 +36,7 @@ public class HandlerTest {
 
         for (InstructionHandle instructionHandle : instructionList) {
             if (instructionHandle.getInstruction() instanceof InvokeInstruction) {
-                MethodCallInfo methodCallInfo = invokeJvmDynamicCallCommandHandler.handle(callerJavaClass, method, instructionHandle);
+                MethodCallInfo methodCallInfo = callCommandHandlerDispatcher.doDispatch(callerJavaClass, method, instructionHandle);
                 Console.log(methodCallInfo);
             }
         }
