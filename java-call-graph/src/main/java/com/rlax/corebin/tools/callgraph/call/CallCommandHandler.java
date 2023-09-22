@@ -1,7 +1,9 @@
 package com.rlax.corebin.tools.callgraph.call;
 
+import com.rlax.corebin.tools.callgraph.common.CallType;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InvokeInstruction;
 
 /**
@@ -15,9 +17,9 @@ public interface CallCommandHandler {
      * 调用指令处理器
      * @param callerJavaClass 调用者类
      * @param callerMethod 调用者方法
-     * @param invokeInstruction 调用指令
+     * @param instructionHandle 调用指令
      * @return 调用信息
      */
-    MethodCallInfo handleCallCommand(JavaClass callerJavaClass, Method callerMethod, InvokeInstruction invokeInstruction);
+    MethodCallInfo handleCallCommand(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle, CallType callType);
 
 }

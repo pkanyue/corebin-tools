@@ -1,5 +1,6 @@
 package com.rlax.corebin.tools.callgraph.util;
 
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.rlax.corebin.tools.callgraph.common.CallType;
@@ -16,6 +17,7 @@ import org.apache.bcel.generic.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * 工具类
@@ -24,6 +26,8 @@ import java.util.List;
  * @date 2023/09/13
  */
 public class CallUtil {
+
+    private final static ExecutorService EXECUTOR = ThreadUtil.newSingleExecutor();
 
     public static List<CallItem> generateModel(String fullCallClassName, String methodName, Class<?>... paramClassType) {
         JavaClass callerJavaClass = BaceUtil.loadClass(fullCallClassName);

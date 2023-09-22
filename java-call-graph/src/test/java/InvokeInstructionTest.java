@@ -34,6 +34,8 @@ public class InvokeInstructionTest {
                 continue;
             }
 
+            Console.log(callType);
+
             InvokeInstruction invokeInstruction = (InvokeInstruction) instructionHandle.getInstruction();
             if (opCode == Const.INVOKEDYNAMIC) {
                 INVOKEDYNAMIC invokedynamic = (INVOKEDYNAMIC) invokeInstruction;
@@ -106,6 +108,12 @@ public class InvokeInstructionTest {
                         Console.log(className);
                         Console.log(methodName);
                         Console.log(methodArgs);
+
+                        // 获取 lambda 方法
+//                        java.lang.reflect.Method m2 = ReflectUtil.getMethod(ClassUtil.loadClass(fullCallClassName), methodName, String.class);
+//                        Method method2 = BaceUtil.findMethodByReflectMethod(callerJavaClass, m2);
+//
+//                        Console.log(method2.getName());
                     }
                 }
             }

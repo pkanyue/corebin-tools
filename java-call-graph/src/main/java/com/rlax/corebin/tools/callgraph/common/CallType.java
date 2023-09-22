@@ -15,6 +15,9 @@ public enum CallType implements BaseEnum {
     JVM_INVOKE_SPECIAL(String.valueOf(Const.INVOKESPECIAL), "INVOKESPECIAL"),
     JVM_INVOKE_STATIC(String.valueOf(Const.INVOKESTATIC), "INVOKESTATIC"),
     JVM_INVOKE_DYNAMIC(String.valueOf(Const.INVOKEDYNAMIC), "INVOKEDYNAMIC"),
+    JVM_INVOKE_DYNAMIC_LAMBDA("JVM_INVOKE_DYNAMIC_LAMBDA", "Lambda表达式"),
+
+
     // Spring Bean相关的调用类型
     SPRING_BEAN_ACTUAL_INTERFACE("_SPR_ACT_I", "被调用接口为 Spring Bean ，替换为实际的类型"),
     SPRING_BEAN_ACTUAL_CLASS("_SPR_ACT_C", "被调用类为 Spring Bean ，替换为实际的类型"),
@@ -22,7 +25,6 @@ public enum CallType implements BaseEnum {
     ACTUAL_INTERFACE("_ACT_I", "被调用接口替换为实际的类型"),
     ACTUAL_CLASS("_ACT_C", "被调用类替换为实际的类型"),
     INTERFACE_CALL_IMPL_CLASS("_ITF", "接口调用实现类"),
-    LAMBDA("_LM", "Lambda表达式"),
     RUNNABLE_INIT_RUN1("_RIR1", "其他方法调用Runnable 构造函数"),
     RUNNABLE_INIT_RUN2("_RIR2", "Runnable 构造函数调用 run() 方法"),
     CALLABLE_INIT_CALL1("_CIC1", "其他方法调用Callable 构造函数"),

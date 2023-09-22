@@ -1,7 +1,6 @@
 package bean;
 
 import cn.hutool.core.lang.Console;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 
