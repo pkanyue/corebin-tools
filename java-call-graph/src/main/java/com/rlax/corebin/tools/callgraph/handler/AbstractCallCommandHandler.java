@@ -1,5 +1,6 @@
-package com.rlax.corebin.tools.callgraph.call;
+package com.rlax.corebin.tools.callgraph.handler;
 
+import com.rlax.corebin.tools.callgraph.call.MethodCallInfo;
 import com.rlax.corebin.tools.callgraph.common.CallType;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -20,17 +21,17 @@ public abstract class AbstractCallCommandHandler implements CallCommandHandler {
     }
 
     @Override
-    public MethodCallInfo handle(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle) {
+    public MethodCallInfo handle(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle, String callOrder) {
         InvokeInstruction invokeInstruction = (InvokeInstruction) instructionHandle.getInstruction();
         short opCode = invokeInstruction.getOpcode();
         CallType callType = CallType.getByCode(String.valueOf(opCode));
         if (support(callType)) {
-            return handleCallCommand(callerJavaClass, callerMethod, instructionHandle, callType);
+            return handleCallCommand(callerJavaClass, callerMethod, instructionHandle, callType, callOrder);
         } else {
             if (next == null) {
                 return null;
             }
-            return next.handle(callerJavaClass, callerMethod, instructionHandle);
+            return next.handle(callerJavaClass, callerMethod, instructionHandle, callOrder);
         }
     }
 

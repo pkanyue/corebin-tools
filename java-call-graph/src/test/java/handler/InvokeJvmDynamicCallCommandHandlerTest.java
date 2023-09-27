@@ -3,12 +3,10 @@ package handler;
 import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.rlax.corebin.tools.callgraph.call.InvokeJvmDynamicCallCommandHandler;
+import com.rlax.corebin.tools.callgraph.handler.InvokeJvmDynamicCallCommandHandler;
 import com.rlax.corebin.tools.callgraph.call.MethodCallInfo;
-import com.rlax.corebin.tools.callgraph.common.CallType;
 import com.rlax.corebin.tools.callgraph.util.BaceUtil;
 import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.classfile.LineNumberTable;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
 import org.junit.jupiter.api.Test;
@@ -34,7 +32,7 @@ public class InvokeJvmDynamicCallCommandHandlerTest {
 
         for (InstructionHandle instructionHandle : instructionList) {
             if (instructionHandle.getInstruction() instanceof InvokeInstruction) {
-                MethodCallInfo methodCallInfo = handler.handle(callerJavaClass, method, instructionHandle);
+                MethodCallInfo methodCallInfo = handler.handle(callerJavaClass, method, instructionHandle, "1");
                 Console.log(methodCallInfo);
             }
         }

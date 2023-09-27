@@ -37,10 +37,14 @@ public class MethodCallInfo {
     /**
      * JVM 调用指令
      */
-    short jvmOpCode;
+    private short jvmOpCode;
     /**
      * 真实调用类型
      */
-    CallType callType;
+    private CallType callType;
 
+    /**
+     * 调用序号，如：1/1.1/2/2.1/2.1.1
+     */
+    private String callOrder;
 }

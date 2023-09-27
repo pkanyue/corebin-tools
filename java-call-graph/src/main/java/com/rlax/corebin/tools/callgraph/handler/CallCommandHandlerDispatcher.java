@@ -1,5 +1,6 @@
-package com.rlax.corebin.tools.callgraph.call;
+package com.rlax.corebin.tools.callgraph.handler;
 
+import com.rlax.corebin.tools.callgraph.call.MethodCallInfo;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.InstructionHandle;
@@ -28,10 +29,10 @@ public class CallCommandHandlerDispatcher {
         handlers.add(handler);
     }
 
-    public MethodCallInfo doDispatch(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle) {
+    public MethodCallInfo doDispatch(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle, String callOrder) {
         if (handlers.isEmpty()) {
             return null;
         }
-        return handlers.get(0).handle(callerJavaClass, callerMethod, instructionHandle);
+        return handlers.get(0).handle(callerJavaClass, callerMethod, instructionHandle, callOrder);
     }
 }

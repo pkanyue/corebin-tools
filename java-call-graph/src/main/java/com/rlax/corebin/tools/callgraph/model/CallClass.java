@@ -26,6 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Builder
 public class CallClass {
 
+    /**
+     * key: fullClassName
+     * value: CallClass
+     */
     private static final Map<String, CallClass> CALL_CLASS_POOL = new ConcurrentHashMap<>();
 
     /**

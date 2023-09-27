@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Console;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.rlax.corebin.tools.callgraph.call.*;
+import com.rlax.corebin.tools.callgraph.handler.*;
 import com.rlax.corebin.tools.callgraph.util.BaceUtil;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -36,7 +37,7 @@ public class CallCommandHandlerDispatcherTest {
 
         for (InstructionHandle instructionHandle : instructionList) {
             if (instructionHandle.getInstruction() instanceof InvokeInstruction) {
-                MethodCallInfo methodCallInfo = callCommandHandlerDispatcher.doDispatch(callerJavaClass, method, instructionHandle);
+                MethodCallInfo methodCallInfo = callCommandHandlerDispatcher.doDispatch(callerJavaClass, method, instructionHandle, "1");
                 Console.log(methodCallInfo);
             }
         }

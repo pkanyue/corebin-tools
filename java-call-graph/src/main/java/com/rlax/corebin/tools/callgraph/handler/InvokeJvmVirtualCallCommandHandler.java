@@ -1,5 +1,6 @@
-package com.rlax.corebin.tools.callgraph.call;
+package com.rlax.corebin.tools.callgraph.handler;
 
+import com.rlax.corebin.tools.callgraph.call.MethodCallInfo;
 import com.rlax.corebin.tools.callgraph.common.CallType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.bcel.classfile.JavaClass;
@@ -25,7 +26,7 @@ public class InvokeJvmVirtualCallCommandHandler extends AbstractCallCommandHandl
     }
 
     @Override
-    public MethodCallInfo handleCallCommand(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle, CallType callType) {
+    public MethodCallInfo handleCallCommand(JavaClass callerJavaClass, Method callerMethod, InstructionHandle instructionHandle, CallType callType, String callOrder) {
         InvokeInstruction invokeInstruction = (InvokeInstruction) instructionHandle.getInstruction();
         ConstantPoolGen constantPoolGen = new ConstantPoolGen(callerJavaClass.getConstantPool());
         LineNumberTable lineNumberTable = callerMethod.getLineNumberTable();
@@ -48,6 +49,7 @@ public class InvokeJvmVirtualCallCommandHandler extends AbstractCallCommandHandl
                 .calledMethodName(calledMethodName)
                 .calledMethodArguments(calledArguments)
                 .calledMethodReturnType(calledReturnType)
+                .callOrder(callOrder)
                 .build();
     }
 

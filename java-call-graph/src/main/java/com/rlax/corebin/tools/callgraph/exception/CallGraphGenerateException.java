@@ -1,7 +1,6 @@
 package com.rlax.corebin.tools.callgraph.exception;
 
 import com.rlax.corebin.core.exception.BaseUncheckedException;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Rlax

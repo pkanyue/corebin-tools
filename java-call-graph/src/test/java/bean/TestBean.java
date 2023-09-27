@@ -21,6 +21,11 @@ public class TestBean {
         m1();
     }
 
+    public void save2(String ps1) throws Exception {
+        ms1();
+        m1();
+    }
+
     public static void ms1() {
 
     }

@@ -52,7 +52,6 @@ public class BaceUtil {
 
     @SneakyThrows
     public static Method findMethod(JavaClass javaClass, String callerMethodName, Type[] calledArguments) {
-        log.info("{}, {}, {}", javaClass.getClassName(), callerMethodName, calledArguments);
         for (Method method : javaClass.getMethods()) {
             if (!method.getName().equals(callerMethodName)) {
                 continue;

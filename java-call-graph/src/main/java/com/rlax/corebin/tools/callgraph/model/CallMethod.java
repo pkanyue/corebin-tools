@@ -24,6 +24,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Builder
 public class CallMethod {
 
+    /**
+     * key: ownerClass.getFullClassName() + StringPool.DOT + fullMethodString
+     * value: CallMethod
+     */
     private static final Map<String, CallMethod> METHOD_POOL = new ConcurrentHashMap<>();
 
     /**
